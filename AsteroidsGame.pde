@@ -1,15 +1,119 @@
 //your variable declarations here
-public void setup() 
-{
-  //your code here
+SpaceShip fish = new SpaceShip();
+public void setup() {
+  noStroke();
+  size(600,600);
 }
-public void draw() 
-{
-  //your code here
+public void draw() {
+  background(#5378AA);
+
+  fish.show();
+  fish.move();
+  fish.keyPressed();
+  System.out.println(fish.iA);
+  fish.fadeA();
+  fish.fadeB();
 }
-class SpaceShip //extends Floater  
-{   
-    //your code here
+public void keyReleased(){
+  if(key==' '){
+    fish.fadeA(true);
+    fish.hyperSpace(true);
+    fish.fadeB(true);
+  }
+}
+
+class SpaceShip extends Floater  {
+  private boolean canHy, isFading, hyperSpaceMode;
+  private int myT,iA; 
+  SpaceShip(){
+    myCenterX=300;
+    myCenterY=300;
+    myDirectionX=0;
+    myDirectionY=0;
+    myPointDirection=0;
+
+    myT=0;
+    iA = 0;
+    myColor=color(40,65,99);
+
+    corners=12;
+    xCorners = new int[12];
+    yCorners = new int[12];
+    xCorners[0]=0+25;
+    yCorners[0]=0;
+    xCorners[1]=-10+25;
+    yCorners[1]=8;
+    xCorners[2]=-30+25;
+    yCorners[2]=10;
+    xCorners[3]=-40+25;
+    yCorners[3]=0;
+    xCorners[4]=-50+25;
+    yCorners[4]=10;
+    xCorners[5]=-48+25;
+    yCorners[5]=3;
+    xCorners[6]=-40+25;
+    yCorners[6]=0;
+    xCorners[7]=-48+25;
+    yCorners[7]=-3;
+    xCorners[8]=-50+25;
+    yCorners[8]=-10;
+    xCorners[9]=-40+25;
+    yCorners[9]=0;
+    xCorners[10]=-30+25;
+    yCorners[10]=-10;
+    xCorners[11]=-10+25;
+    yCorners[11]=-8;
+
+    canHy=true;
+    isFading=false;
+    iA=0;
+  }
+
+  public void keyPressed(){
+    if(key=='w'&&keyPressed==true){accelerate(.05);}
+    if(key=='a'&&keyPressed==true){
+      rotate(-1);
+    }else if(key=='d'&&keyPressed==true){
+      rotate(1);
+    }else{
+      rotate(0);
+    }
+    if(key=='s'&&keyPressed==true){accelerate(-.05);}
+  }
+  public void fadeA(boolean mode){
+    if(iA<127){
+      myT=(int)(255*sin(iA*50));
+      iA++;
+    }
+  }
+  }public void fadeB(boolean mode){
+    if(iA<255){
+      myT=(int)(255*sin(iA*50));
+      iA++;
+    }
+  }
+  public void hyperSpace(boolean mode){
+    hyperSpaceMode=mode;
+
+    if(hyperSpaceMode==true){
+      myCenterX=(int)(Math.random()*width);
+      myCenterY=(int)(Math.random()*height);
+      myDirectionX=0;
+      myDirectionY=0;
+      myPointDirection=(int)(Math.random()*360);
+    }
+    hyperSpaceMode=false;
+  }
+  public void setX(int x){myCenterX=x;}  
+  public int getX(){return (int)myCenterX;}   
+  public void setY(int y){myCenterY=y;}   
+  public int getY(){return (int)myCenterY;}   
+  public void setDirectionX(double x){myDirectionX=x;}   
+  public double getDirectionX(){return myDirectionX;}
+  public void setDirectionY(double y){myDirectionY=y;}  
+  public double getDirectionY(){return myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection=degrees;}
+  public double getPointDirection(){return myPointDirection;} 
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
