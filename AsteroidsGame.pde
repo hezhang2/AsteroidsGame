@@ -2,7 +2,7 @@
 SpaceShip fish = new SpaceShip();
 public void setup() {
   noStroke();
-  size(600,600);
+  size(600, 600);
 }
 public void draw() {
   background(#5378AA);
@@ -10,21 +10,19 @@ public void draw() {
   fish.show();
   fish.move();
   fish.keyPressed();
-  fish.fadeA();
-  fish.fadeB();
 }
-public void keyReleased(){
-  if(key==' '){
+public void keyReleased() {
+  if (key==' ') {
     fish.fadeA(true);
     fish.hyperSpace(true);
     fish.fadeB(true);
   }
 }
 
-class SpaceShip extends Floater  {
+class SpaceShip extends Floater {
   private boolean canHy, isFading, hyperSpaceMode;
-  private int myT,iA; 
-  SpaceShip(){
+  private int myT, iA; 
+  SpaceShip() {
     myCenterX=300;
     myCenterY=300;
     myDirectionX=0;
@@ -33,7 +31,7 @@ class SpaceShip extends Floater  {
 
     myT=0;
     iA = 0;
-    myColor=color(40,65,99);
+    myColor=color(40, 65, 99);
 
     corners=12;
     xCorners = new int[12];
@@ -67,34 +65,37 @@ class SpaceShip extends Floater  {
     isFading=false;
     iA=0;
   }
-
-  public void keyPressed(){
-    if(key=='w'&&keyPressed==true){accelerate(.05);}
-    if(key=='a'&&keyPressed==true){
+  public void keyPressed() {
+    if (key=='w'&&keyPressed==true) {
+      accelerate(.05);
+    }
+    if (key=='a'&&keyPressed==true) {
       rotate(-1);
-    }else if(key=='d'&&keyPressed==true){
+    } else if (key=='d'&&keyPressed==true) {
       rotate(1);
-    }else{
+    } else {
       rotate(0);
     }
-    if(key=='s'&&keyPressed==true){accelerate(-.05);}
+    if (key=='s'&&keyPressed==true) {
+      accelerate(-.05);
+    }
   }
-  public void fadeA(boolean mode){
-    if(iA<127){
+  public void fadeA(boolean mode) {
+    if (iA<127) {
       myT=(int)(255*sin(iA*50));
       iA++;
     }
   }
-  }public void fadeB(boolean mode){
-    if(iA<255){
+  public void fadeB(boolean mode) {
+    if (iA<255) {
       myT=(int)(255*sin(iA*50));
       iA++;
     }
   }
-  public void hyperSpace(boolean mode){
+  public void hyperSpace(boolean mode) {
     hyperSpaceMode=mode;
 
-    if(hyperSpaceMode==true){
+    if (hyperSpaceMode==true) {
       myCenterX=(int)(Math.random()*width);
       myCenterY=(int)(Math.random()*height);
       myDirectionX=0;
@@ -103,17 +104,39 @@ class SpaceShip extends Floater  {
     }
     hyperSpaceMode=false;
   }
-  public void setX(int x){myCenterX=x;}  
-  public int getX(){return (int)myCenterX;}   
-  public void setY(int y){myCenterY=y;}   
-  public int getY(){return (int)myCenterY;}   
-  public void setDirectionX(double x){myDirectionX=x;}   
-  public double getDirectionX(){return myDirectionX;}
-  public void setDirectionY(double y){myDirectionY=y;}  
-  public double getDirectionY(){return myDirectionY;}
-  public void setPointDirection(int degrees){myPointDirection=degrees;}
-  public double getPointDirection(){return myPointDirection;} 
+  public void setX(int x) {
+    myCenterX=x;
+  }  
+  public int getX() {
+    return (int)myCenterX;
+  }   
+  public void setY(int y) {
+    myCenterY=y;
+  }   
+  public int getY() {
+    return (int)myCenterY;
+  }   
+  public void setDirectionX(double x) {
+    myDirectionX=x;
+  }   
+  public double getDirectionX() {
+    return myDirectionX;
+  }
+  public void setDirectionY(double y) {
+    myDirectionY=y;
+  }  
+  public double getDirectionY() {
+    return myDirectionY;
+  }
+  public void setPointDirection(int degrees) {
+    myPointDirection=degrees;
+  }
+  public double getPointDirection() {
+    return myPointDirection;
+  } 
 }
+
+
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
@@ -141,12 +164,12 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     double dRadians =myPointDirection*(Math.PI/180);     
     //change coordinates of direction of travel    
     myDirectionX += ((dAmount) * Math.cos(dRadians));    
-    myDirectionY += ((dAmount) * Math.sin(dRadians));       
+    myDirectionY += ((dAmount) * Math.sin(dRadians));
   }   
   public void rotate (int nDegreesOfRotation)   
   {     
     //rotates the floater by a given number of degrees    
-    myPointDirection+=nDegreesOfRotation;   
+    myPointDirection+=nDegreesOfRotation;
   }   
   public void move ()   //move the floater in the current direction of travel
   {      
@@ -155,22 +178,20 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     myCenterY += myDirectionY;     
 
     //wrap around screen    
-    if(myCenterX >width)
+    if (myCenterX >width)
     {     
-      myCenterX = 0;    
-    }    
-    else if (myCenterX<0)
+      myCenterX = 0;
+    } else if (myCenterX<0)
     {     
-      myCenterX = width;    
+      myCenterX = width;
     }    
-    if(myCenterY >height)
+    if (myCenterY >height)
     {    
-      myCenterY = 0;    
-    }   
-    else if (myCenterY < 0)
+      myCenterY = 0;
+    } else if (myCenterY < 0)
     {     
-      myCenterY = height;    
-    }   
+      myCenterY = height;
+    }
   }   
   public void show ()  //Draws the floater at the current position  
   {             
@@ -180,14 +201,13 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     double dRadians = myPointDirection*(Math.PI/180);                 
     int xRotatedTranslated, yRotatedTranslated;    
     beginShape();         
-    for(int nI = 0; nI < corners; nI++)    
+    for (int nI = 0; nI < corners; nI++)    
     {     
       //rotate and translate the coordinates of the floater using current direction 
       xRotatedTranslated = (int)((xCorners[nI]* Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians))+myCenterX);     
       yRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY);      
-      vertex(xRotatedTranslated,yRotatedTranslated);    
+      vertex(xRotatedTranslated, yRotatedTranslated);
     }   
-    endShape(CLOSE);  
-  }   
+    endShape(CLOSE);
+  }
 } 
-
