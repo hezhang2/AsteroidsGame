@@ -10,7 +10,6 @@ public void draw() {
   fish.show();
   fish.move();
   fish.keyPressed();
-  System.out.println(fish.iA);
   fish.fadeA();
   fish.fadeB();
 }
