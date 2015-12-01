@@ -31,6 +31,13 @@ public void draw() {
     tempLilypads.move();
     tempLilypads.rotate(1);
   }
+  for(int nI=0;nI<lilypads.size();nI++){
+    if(Math.abs(lilypads.get(nI).getX()-fish.getX())<10&&
+       Math.abs(lilypads.get(nI).getY()-fish.getY())<10){
+      lilypads.remove(nI);
+      nI--;
+    }
+  }
 }
 public void keyReleased() {
   if (key==' ') {
