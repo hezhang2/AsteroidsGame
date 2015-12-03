@@ -20,7 +20,6 @@ public void draw() {
 
   fish.show();
   fish.move();
-  fish.keyPressed();
   for(int i=0;i<leaves.length;i++){
     leaves[i].show();
     leaves[i].move();
@@ -39,7 +38,27 @@ public void draw() {
     }
   }
 }
+public void keyPressed(){
+  if(key=='w'){
+    fish.accelerating(1);
+  }
+  if(key=='s'){
+    fish.accelerating(-1);
+  }
+  if(key=='a'){
+    fish.rotating(-1);
+  }
+  if(key=='d'){
+    fish.rotating(1);
+  }
+}
 public void keyReleased() {
+  if(key=='w'||key=='s'){
+    fish.accelerating(0);
+  }
+  if(key=='a'||key=='d'){
+    fish.rotating(0);
+  }
   if (key==' ') {
     fish.hyperSpace(true);
   }
@@ -73,7 +92,6 @@ class Star{
 
 class SpaceShip extends Floater {
   private boolean canHy, hyperSpaceMode;
-  private int myT, iA; 
   SpaceShip() {
     myCenterX=300;
     myCenterY=300;
@@ -81,8 +99,6 @@ class SpaceShip extends Floater {
     myDirectionY=0;
     myPointDirection=0;
 
-    myT=0;
-    iA = 0;
     myColor=color(40, 65, 99);
 
     corners=12;
@@ -112,23 +128,24 @@ class SpaceShip extends Floater {
     yCorners[10]=-10;
     xCorners[11]=-10+25;
     yCorners[11]=-8;
-
-    canHy=true;
-    iA=0;
   }
-  public void keyPressed() {
-    if (key=='w'&&keyPressed==true) {
-      accelerate(.05);
+
+  public void accelerating(int negZeroPos){
+    if(negZeroPos==1){
+      accelerate(.1);
+    }else if(negZeroPos==0){
+      accelerate(0);
+    }else{
+      accelerate(-.1);
     }
-    if (key=='a'&&keyPressed==true) {
-      rotate(-1);
-    } else if (key=='d'&&keyPressed==true) {
-      rotate(1);
-    } else {
+  }
+  public void rotating(int negZeroPos){
+    if(negZeroPos==1){
+      rotate(4);
+    }else if(negZeroPos==0){
       rotate(0);
-    }
-    if (key=='s'&&keyPressed==true) {
-      accelerate(-.05);
+    }else{
+      rotate(-4);
     }
   }
   public void hyperSpace(boolean mode) {
@@ -182,6 +199,28 @@ class Asteroid extends Floater {
     yCorners[5]=2;
 
   }
+  public void move ()   //move the floater in the current direction of travel
+  {
+    //change the x and y coordinates by myDirectionX and myDirectionY   
+    myCenterX += myDirectionX;
+    myCenterY += myDirectionY;
+
+    //wrap around screen    
+    if (myCenterX-7.5 >width)
+    {
+      myCenterX = 0-7.5;
+    } else if (myCenterX+7.5<0)
+    {
+      myCenterX = width+7.5;
+    }
+    if (myCenterY-7.5 >height)
+    {
+      myCenterY = 0-7.5;
+    } else if (myCenterY+7.5 < 0)
+    {
+      myCenterY = height+7.5;
+    }
+  }   
   public void setX(int x) {myCenterX=x;}  
   public int getX() {return (int)myCenterX;}   
   public void setY(int y) {myCenterY=y;}   
