@@ -3,14 +3,14 @@ SpaceShip fish = new SpaceShip();
 Star leaves [] = new Star[20];
 
 ArrayList <Asteroid> lilypads = new ArrayList<Asteroid>();
+ArrayList <Bullet> bubbles = new ArrayList<Bullet>();
 
 public void setup() {
   noStroke();
-  size(600, 600);
+  size(800, 600);
 
-  for(int i=0;i<leaves.length;i++){
+  for(int i=0;i<leaves.length;i++)
     leaves[i]=new Star();
-  }
 
   for(int i=0;i<10;i++)
     lilypads.add(new Asteroid());
@@ -18,59 +18,84 @@ public void setup() {
 public void draw() {
   background(#5378AA);
 
+  for(Bullet tempBubbles: bubbles){
+    tempBubbles.show();
+    tempBubbles.move();
+  }
+  for(int nI=0;nI<bubbles.size();nI++){
+    if(bubbles.get(nI).getX()<-4||bubbles.get(nI).getX()>800-4||
+       bubbles.get(nI).getY()<-4||bubbles.get(nI).getY()>600-4){
+      bubbles.remove(nI);
+      nI--;
+    }
+  }
+
   fish.show();
   fish.move();
   fish.motion();
-  for(int i=0;i<leaves.length;i++){
-    leaves[i].show();
-    leaves[i].move();
-    leaves[i].wrap();
-  }
+
   for(Asteroid tempLilypads: lilypads){
     tempLilypads.show();
     tempLilypads.move();
     tempLilypads.rotate(1);
   }
+
   for(int nI=0;nI<lilypads.size();nI++){
-    if(Math.abs(lilypads.get(nI).getX()-fish.getX())<10&&
-       Math.abs(lilypads.get(nI).getY()-fish.getY())<10){
+    for(int i=0;i<bubbles.size();i++){
+      if(Math.abs(lilypads.get(nI).getX()-bubbles.get(i).getX())<7.5&&
+         Math.abs(lilypads.get(nI).getY()-bubbles.get(i).getY())<7.5){
+        lilypads.remove(nI);
+        bubbles.remove(i);
+      }
+    }
+  }
+  for(int nI=0;nI<lilypads.size();nI++){
+    if(Math.abs(lilypads.get(nI).getX()-fish.getX())<16&&
+       Math.abs(lilypads.get(nI).getY()-fish.getY())<16){
       lilypads.remove(nI);
       nI--;
     }
   }
+
+  for(int i=0;i<leaves.length;i++){
+    leaves[i].show();
+    leaves[i].move();
+    leaves[i].wrap();
+  }
 }
 public void keyPressed(){
-  if(key=='w'){
+  if(key=='w')
     fish.setAccelerating(1);
-  }
-  if(key=='s'){
+  
+  if(key=='s')
     fish.setAccelerating(-1);
-  }
-  if(key=='a'){
+  
+  if(key=='a')
     fish.setRotating(-1);
-  }
-  if(key=='d'){
+  
+  if(key=='d')
     fish.setRotating(1);
-  }
 }
 public void keyReleased() {
-  if(key=='w'||key=='s'){
+  if(key=='w'||key=='s')
     fish.setAccelerating(0);
-  }
-  if(key=='a'||key=='d'){
+  
+  if(key=='a'||key=='d')
     fish.setRotating(0);
-  }
-  if (key==' ') {
+  
+  if(key=='e')
     fish.hyperSpace(true);
-  }
+  
+  if(key==' ')
+    bubbles.add(new Bullet(fish));
 }
 
 class Star{
   private float myX,myY,mySize,myOpacity,xSpeed;
   Star(){
-    myX=(float)(Math.random()*600);
+    myX=(float)(Math.random()*800);
     myY=(float)(Math.random()*600);
-    mySize=(float)(Math.random()*50+20);
+    mySize=(float)(Math.random()*20+100);
     myOpacity=(float)(Math.random()*50+70);
     xSpeed=(float)(Math.random()*.3+.05);
   }
@@ -84,8 +109,8 @@ class Star{
     myY-=.05;
   }
   public void wrap(){
-    if(myX+mySize/2<0){myX=600+mySize/2;}
-    if(myX-mySize/2>600){myX=0-mySize/2;}
+    if(myX+mySize/2<0){myX=800+mySize/2;}
+    if(myX-mySize/2>800){myX=0-mySize/2;}
     if(myY+mySize/2<0){myY=600+mySize/2;}
     if(myY-mySize/2>600){myY=0-mySize/2;}
   }
@@ -95,7 +120,7 @@ class SpaceShip extends Floater {
   private boolean canHy, hyperSpaceMode;
   private int accMode, rotMode;
   SpaceShip() {
-    myCenterX=300;
+    myCenterX=400;
     myCenterY=300;
     myDirectionX=0;
     myDirectionY=0;
@@ -137,18 +162,18 @@ class SpaceShip extends Floater {
 
   public void motion(){
     if(accMode==1){
-      accelerate(.1);
+      accelerate(.035);
     }else if(accMode==0){
       accelerate(0);
     }else{
-      accelerate(-.1);
+      accelerate(-.035);
     }
     if(rotMode==1){
-      rotate(3);
+      rotate(2);
     }else if(rotMode==0){
       rotate(0);
     }else{
-      rotate(-3);
+      rotate(-2);
     }
   }
 
@@ -195,13 +220,38 @@ class SpaceShip extends Floater {
   public double getPointDirection() {return myPointDirection;} 
 }
 
+class Bullet extends Floater{
+  Bullet(SpaceShip theShip){
+    myCenterX=theShip.getX();
+    myCenterY=theShip.getY();
+    myPointDirection=theShip.getPointDirection();
+    double dRadians =myPointDirection*(Math.PI/180);
+    myDirectionX=3*Math.cos(dRadians)+theShip.getDirectionX();
+    myDirectionY=3*Math.sin(dRadians)+theShip.getDirectionY();
+  }
+  public void show(){
+    fill(200,200,200,70);
+    ellipse((float)myCenterX,(float)myCenterY,8,8);
+  }
+  public void setX(int x) {myCenterX=x;}  
+  public int getX() {return (int)myCenterX;}   
+  public void setY(int y) {myCenterY=y;}   
+  public int getY() {return (int)myCenterY;}   
+  public void setDirectionX(double x) {myDirectionX=x;}   
+  public double getDirectionX() {return myDirectionX;}
+  public void setDirectionY(double y) {myDirectionY=y;}  
+  public double getDirectionY() {return myDirectionY;}
+  public void setPointDirection(int degrees) {myPointDirection=degrees;}
+  public double getPointDirection() {return myPointDirection;} 
+}
+
 class Asteroid extends Floater {
   Asteroid(){
-    myCenterX=(int)(Math.random()*600);
+    myCenterX=(int)(Math.random()*800);
     myCenterY=(int)(Math.random()*600);
     myPointDirection=(Math.random()*360);
-    myDirectionX=Math.random()*.5+.1;
-    myDirectionY=-1*(Math.random()*.5+.1);
+    myDirectionX=Math.random()*.2+.2;
+    myDirectionY=-1*(Math.random()*.2+.1);
 
     myColor=color(40, 65, 99);
 
