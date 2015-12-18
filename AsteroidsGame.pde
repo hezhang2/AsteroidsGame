@@ -1,4 +1,8 @@
 //your variable declarations here
+boolean gameOver=false, gameStart=true;
+boolean win=false;
+int score=0;
+
 SpaceShip fish = new SpaceShip();
 Star leaves [] = new Star[20];
 
@@ -7,6 +11,8 @@ ArrayList <Bullet> bubbles = new ArrayList<Bullet>();
 
 public void setup() {
   noStroke();
+  textSize(50);
+  textAlign(CENTER);
   size(800, 600);
 
   for(int i=0;i<leaves.length;i++)
@@ -17,11 +23,11 @@ public void setup() {
 }
 public void draw() {
   background(#5378AA);
-
   for(Bullet tempBubbles: bubbles){
     tempBubbles.show();
     tempBubbles.move();
   }
+
   for(int nI=0;nI<bubbles.size();nI++){
     if(bubbles.get(nI).getX()<-4||bubbles.get(nI).getX()>800-4||
        bubbles.get(nI).getY()<-4||bubbles.get(nI).getY()>600-4){
@@ -34,26 +40,28 @@ public void draw() {
   fish.move();
   fish.motion();
 
-  for(Asteroid tempLilypads: lilypads){
-    tempLilypads.show();
-    tempLilypads.move();
-    tempLilypads.rotate(1);
-  }
+  if(gameOver==false&&gameStart==false&&win==false){
+    for(Asteroid tempLilypads: lilypads){
+      tempLilypads.show();
+      tempLilypads.move();
+      tempLilypads.rotate(1);
+    }
 
-  for(int nI=0;nI<lilypads.size();nI++){
-    for(int i=0;i<bubbles.size();i++){
-      if(Math.abs(lilypads.get(nI).getX()-bubbles.get(i).getX())<7.5&&
-         Math.abs(lilypads.get(nI).getY()-bubbles.get(i).getY())<7.5){
-        lilypads.remove(nI);
-        bubbles.remove(i);
+    for(int nI=0;nI<lilypads.size();nI++){
+      for(int i=0;i<bubbles.size();i++){
+        if(Math.abs(lilypads.get(nI).getX()-bubbles.get(i).getX())<7.5&&
+           Math.abs(lilypads.get(nI).getY()-bubbles.get(i).getY())<7.5){
+          lilypads.remove(nI);
+          bubbles.remove(i);
+          score++;
+        }
       }
     }
-  }
-  for(int nI=0;nI<lilypads.size();nI++){
-    if(Math.abs(lilypads.get(nI).getX()-fish.getX())<16&&
-       Math.abs(lilypads.get(nI).getY()-fish.getY())<16){
-      lilypads.remove(nI);
-      nI--;
+    for(int nI=0;nI<lilypads.size();nI++){
+      if(Math.abs(lilypads.get(nI).getX()-fish.getX())<16&&
+         Math.abs(lilypads.get(nI).getY()-fish.getY())<16){
+        gameOver=true;
+      }
     }
   }
 
@@ -61,6 +69,35 @@ public void draw() {
     leaves[i].show();
     leaves[i].move();
     leaves[i].wrap();
+  }
+
+  if(score==10){
+    win=true;
+    text("Y O U  W I N",width/2, height/2);
+  }
+
+  if(gameOver==true){
+    fill(40, 65, 99);
+    text("G A M E  O V E R", width/2, height/2);
+  }
+
+  if(gameStart==true){
+    fill(40, 65, 99);
+    text("C L I C K  T O  S T A R T",width/2,height/2);
+  }
+}
+public void mousePressed(){
+  if(gameOver==true){
+    gameStart=true;
+    gameOver=false;
+    score=0;
+  }
+  if(gameStart==true){
+    gameStart=false;
+  }
+  if(win==true){
+    score=0;
+    win=false;
   }
 }
 public void keyPressed(){
@@ -95,7 +132,7 @@ class Star{
   Star(){
     myX=(float)(Math.random()*800);
     myY=(float)(Math.random()*600);
-    mySize=(float)(Math.random()*20+100);
+    mySize=(float)(Math.random()*20+200);
     myOpacity=(float)(Math.random()*50+70);
     xSpeed=(float)(Math.random()*.3+.05);
   }
